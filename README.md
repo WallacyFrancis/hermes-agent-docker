@@ -48,38 +48,80 @@ graph TD
 
 ---
 
-## 🚀 Como Executar
+## 🛠️ Instalação do Docker (Caso ainda não tenha)
 
-### 1. Pré-requisitos
-- Docker Engine 24+ e Docker Compose v2.
-- Criação do volume Docker persistente (caso ainda não exista):
+Se estiver configurando em uma máquina nova (Ubuntu/Debian):
+
+```bash
+# 1. Instalação rápida do Docker Engine e Docker Compose Plugin
+curl -fsSL https://get.docker.com | sh
+
+# 2. Adicionar seu usuário ao grupo docker (para rodar sem sudo)
+sudo usermod -aG docker $USER
+newgrp docker
+
+# 3. Validar a instalação
+docker --version
+docker compose version
+```
+
+---
+
+## 🚀 Como Subir o Projeto
+
+### 1. Clonar o Repositório
+
+```bash
+git clone git@github.com:WallacyFrancis/hermes-agent-docker.git
+cd hermes-agent-docker
+```
+
+### 2. Criar o Volume Persistente
+O volume `hermes-agent-data` guarda a base de dados, memórias e cache do Hermes de forma independente:
 
 ```bash
 docker volume create hermes-agent-data
 ```
 
-### 2. Configurar Variáveis de Ambiente
+### 3. Configurar Variáveis de Ambiente
 Copie o template `.env.example` para `hermes.env` (ou `.env`) e preencha suas chaves e credenciais:
 
 ```bash
 cp .env.example hermes.env
+nano hermes.env  # ou abra no seu editor preferido
 ```
 
 > **Atenção:** Mantenha suas credenciais seguras. O arquivo `hermes.env` e `.env` estão devidamente incluídos no `.gitignore`.
 
-### 3. Iniciar os Containers
+### 4. Construir e Iniciar os Containers
 
 ```bash
-# Construir a imagem customizada e subir os serviços em background
+# Constrói a imagem customizada com as dependências e inicia os serviços em background
 docker compose up -d --build
 ```
 
-### 4. Verificar Status e Logs
+### 5. Verificar Status e Logs
 
 ```bash
+# Ver status dos containers
 docker compose ps
+
+# Acompanhar os logs do Hermes em tempo real
 docker compose logs -f hermes
 ```
+
+---
+
+## 🎮 Comandos Úteis do Ciclo de Vida
+
+| Ação | Comando |
+| :--- | :--- |
+| **Iniciar containers** | `docker compose up -d` |
+| **Parar containers** | `docker compose stop` |
+| **Parar e remover containers** | `docker compose down` |
+| **Reiniciar o Hermes** | `docker compose restart hermes` |
+| **Reconstruir imagem após alterações** | `docker compose up -d --build` |
+| **Ver logs de todos os serviços** | `docker compose logs -f` |
 
 ---
 
