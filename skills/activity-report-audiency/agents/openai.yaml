@@ -1,0 +1,4 @@
+interface:
+  display_name: "Relatório Audiency"
+  short_description: "Resume atividades dos chamados e envia ao Rocket.Chat."
+  default_prompt: "Gere e envie o relatório de atividades de desenvolvimento do dia anterior."

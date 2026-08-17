@@ -1,0 +1,53 @@
+# Environment variables & secrets
+.env
+*.env
+!*.env.example
+hermes.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Node / JS artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+
+# Databases & Runtime State
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.lock
+*.pid
+
+# Logs & Cache
+*.log
+logs/
+cache/
+image_cache/
+audio_cache/
+.hermes_history
+.bash_history
+
+# Local data & temp
+data/
+downloads/
+reports/*.json
+!reports/.gitkeep
+
+# OS / Editor artifacts
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo

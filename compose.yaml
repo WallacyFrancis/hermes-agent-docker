@@ -1,0 +1,90 @@
+services:
+  hermes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hermes-agent-browser:local
+    container_name: hermes-agent
+    command: gateway run
+    restart: unless-stopped
+    init: true
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+    volumes:
+      - hermes-data:/opt/data
+      # Skill and read-only context required for the Audiency support workflow.
+      - ./skills/suporte-audiency:/opt/data/skills/suporte-audiency:ro
+      - ./skills/activity-report-audiency:/opt/data/skills/activity-report-audiency:ro
+      - ./skills/development-orchestrator:/opt/data/skills/development-orchestrator:ro
+      # The Hermes environment holds SUPORTE_AUDIENCY_*; expose it to the skill
+      # under the conventional .env path without copying secrets into the image.
+      - /home/wallacy/hermes.env:/mnt/host/.env:ro
+      - /home/wallacy/Documentos/Obsidian Vault/Audiency Memory/suporte-next:/mnt/audiency-memory/suporte-next:ro
+      # Único workspace de código disponível ao orquestrador de desenvolvimento.
+      - /home/wallacy/Documentos:/mnt/documentos
+      - /home/wallacy/.local/bin/agy:/usr/local/bin/agy:ro
+      - /home/wallacy/.codex/packages/standalone/current/bin/codex:/usr/local/bin/codex:ro
+      - /home/wallacy/.local/share/cursor-agent:/opt/cursor-agent:ro
+      - /home/wallacy/.gemini:/opt/data/home/.gemini
+      - /home/wallacy/.codex:/opt/data/home/.codex
+      - /home/wallacy/.cursor:/opt/data/home/.cursor
+      - /home/wallacy/.config/Cursor:/opt/data/home/.config/Cursor:ro
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      hermes-network: {}
+
+  chromium:
+    image: lscr.io/linuxserver/chromium:latest
+    container_name: hermes-chromium
+    restart: unless-stopped
+    shm_size: 1gb
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: America/Sao_Paulo
+      # Disponível apenas para os containers desta composição.
+      CHROME_CLI: --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222
+    volumes:
+      - chromium-config:/config
+    ports:
+      # Interface noVNC para concluir login, 2FA e CAPTCHA manualmente.
+      - "127.0.0.1:27027:3000"
+    expose:
+      - "9222"
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      hermes-network:
+        ipv4_address: 172.30.0.10
+
+  # O Chromium recente restringe o DevTools a 127.0.0.1, mesmo quando recebe
+  # --remote-debugging-address. Este proxy compartilha a rede do Chromium e
+  # disponibiliza a CDP somente para os demais containers da composição.
+  cdp-proxy:
+    image: alpine/socat:latest
+    restart: unless-stopped
+    network_mode: service:chromium
+    depends_on:
+      chromium:
+        condition: service_started
+    command:
+      - TCP-LISTEN:9222,fork,reuseaddr,bind=chromium
+      - TCP:127.0.0.1:9222
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  hermes-data:
+    name: hermes-agent-data
+    external: true
+  chromium-config:
+    name: hermes-chromium-config
+
+networks:
+  hermes-network:
+    name: hermes-agent-network
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24

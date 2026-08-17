@@ -1,0 +1,27 @@
+{
+  "Anthropic-Cybersecurity-Skills": {
+    "pinned": false,
+    "revision": "4c0b700ac5d280ba46695062077f0fe922ce3602",
+    "source": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills.git"
+  },
+  "cognee": {
+    "pinned": false,
+    "revision": "4b9dd362625dfd3621c344e571a86f5bc7a55ee8",
+    "source": "https://github.com/topoteretes/cognee.git"
+  },
+  "drawio-skill": {
+    "pinned": false,
+    "revision": "2ee141e0ff183ce76dc405370aeb142c6961aa45",
+    "source": "https://github.com/Agents365-ai/drawio-skill.git"
+  },
+  "open-design": {
+    "pinned": false,
+    "revision": "a62f870ba01f7ff7b78916c666b7a51c10012a40",
+    "source": "https://github.com/nexu-io/open-design.git"
+  },
+  "superpowers": {
+    "pinned": false,
+    "revision": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
+    "source": "https://github.com/obra/superpowers.git"
+  }
+}

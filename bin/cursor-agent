@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+# The host's `agent` command is a wrapper whose assets live next to it. The
+# complete Cursor Agent installation is mounted read-only at /opt/cursor-agent.
+for binary in /opt/cursor-agent/versions/*/cursor-agent; do
+  if [ -x "$binary" ]; then
+    exec "$binary" "$@"
+  fi
+done
+
+echo "Cursor Agent is not installed in /opt/cursor-agent/versions." >&2
+exit 127

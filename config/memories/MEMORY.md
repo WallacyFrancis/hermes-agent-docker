@@ -1,0 +1,3 @@
+User enforces strict .env-only credential policy: ALL skills MUST read credentials exclusively from `.env` (${HERMES_HOME}/.env or /opt/data/.env). No separate credential files, git-credentials, or hardcoded configs allowed. Skill `credential-security` captures the full audit-and-migrate workflow.
+§
+User's external development projects directory: /mnt/documentos (maps to /home/wallacy/Documentos on host). This is where all dev project code lives for CLI agents. HERMES_WRITE_SAFE_ROOT=/opt/data blocks write_file to that path — use terminal cat/heredoc for file creation there.
